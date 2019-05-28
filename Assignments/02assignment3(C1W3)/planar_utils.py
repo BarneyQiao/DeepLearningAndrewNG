@@ -31,28 +31,42 @@ def sigmoid(x):
     Return:
     s -- sigmoid(x)
     """
-    x.astype(np.float128)
+   # x.astype(np.float128)
     s = 1/(1+np.exp(-x))
     return s
 
 def load_planar_dataset():
-    np.random.seed(1)
+    np.random.seed(1) #设定random.seed(1)
+    '''
+    如何理解random.seed(参数)，其实就是为了设定一个种子(参数),参数值不重要，但是相同参数下生成的随机数是一样的
+    但是注意seed是有作用域的
+    '''
     m = 400 # number of examples
-    N = int(m/2) # number of points per class
-    D = 2 # dimensionality
-    X = np.zeros((m,D)) # data matrix where each row is a single example
-    Y = np.zeros((m,1), dtype='uint8') # labels vector (0 for red, 1 for blue)
-    a = 4 # maximum ray of the flower
+    N = int(m/2) # number of points per class  这里是说每个example是由两个点组成，因此在每一个类别中有200个点
+    D = 2 # dimensionality 维度2
+    X = np.zeros((m,D)) # (400,2)data matrix where each row is a single example  样本集就是一个（样本数量，二维点）[[坐标1，坐标2]，....]
+    Y = np.zeros((m,1), dtype='uint8') # labels vector (0 for red, 1 for blue) 标签集是一个样本数量为行，结果为列的，也就是一个(400,1)的列向量
+    a = 4 # maximum ray of the flower  也就是规定了组成点坐标的最大值不超过4
 
-    for j in range(2):
-        ix = range(N*j,N*(j+1))
+    #这里将如何生成
+    for j in range(2):  # 设置range(2)是为了 正反例都是200个用2个循环去生成 
+        ix = range(N*j,N*(j+1))       # 两次循环 第一次range(0,200)  第二次(200,400)
         t = np.linspace(j*3.12,(j+1)*3.12,N) + np.random.randn(N)*0.2 # theta
-        r = a*np.sin(4*t) + np.random.randn(N)*0.2 # radius
-        X[ix] = np.c_[r*np.sin(t), r*np.cos(t)]
-        Y[ix] = j
+        '''
+        np.linspace(start, stop, num=50, endpoint=True, retstep=False, dtype=None, axis=0)  
+        在start 到stop的范围内等距生成num个点（默认为50），包括stop，这里生成了N=200个点
         
-    X = X.T
-    Y = Y.T
+        numpy.random.randn(d0,d1,…,dn)
+        randn函数返回一个或一组样本，具有标准正态分布。
+        dn表格每个维度
+        返回值为指定维度的array
+        '''
+        r = a*np.sin(4*t) + np.random.randn(N)*0.2 # radius
+        X[ix] = np.c_[r*np.sin(t), r*np.cos(t)]  #np.c_是按行连接两个矩阵，就是把两矩阵左右相加，要求行数相等。这里就是把俩个数组成一个行矩阵，赋值给X的第ix行
+        Y[ix] = j  #生成该类的标签
+        
+    X = X.T   # 转置形成(2,400)样本集
+    Y = Y.T   # 转置形成(1,400)的标签集
 
     return X, Y
 
