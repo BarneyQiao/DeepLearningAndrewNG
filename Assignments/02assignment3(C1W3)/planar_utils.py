@@ -4,18 +4,40 @@ import sklearn
 import sklearn.datasets
 import sklearn.linear_model
 
-def plot_decision_boundary(model, X, y):
-    # Set min and max values and give it some padding
-    x_min, x_max = X[0, :].min() - 1, X[0, :].max() + 1
-    y_min, y_max = X[1, :].min() - 1, X[1, :].max() + 1
+# 画决策边界，很炫的技能，也就是说将一个区域内的网格点以预测值为高度，然后用函数把相同高度的点区域内着色。多看几遍。
+def plot_decision_boundary(model, X, y):    # 输入参数为三个，预测值 y· ，X，真实值y
+    # X 的维度为: (2, 400)   Y 的维度为: (1, 400)
+    # Set min and max values and give it some padding 取得这些点的一个范围
+    x_min, x_max = X[0, :].min() - 1, X[0, :].max() + 1  # 取400个Example中横坐标最小的，最大的
+    y_min, y_max = X[1, :].min() - 1, X[1, :].max() + 1  # 取400个Example中纵坐标最小的，最大的
     h = 0.01
     # Generate a grid of points with distance h between them
     xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+    '''
+    一句话解释numpy.meshgrid()——生成网格点坐标矩阵。用这种方法画决策边界。
+    返回值： np.arange()函数返回一个有终点和起点的固定步长的排列，如[1,2,3,4,5]，起点是1，终点是5，步长为1。 
+    参数个数情况： np.arange()函数分为一个参数，两个参数，三个参数三种情况 
+    1）一个参数时，参数值为终点，起点取默认值0，步长取默认值1。 
+    2）两个参数时，第一个参数为起点，第二个参数为终点，步长取默认值1。 
+    3）三个参数时，第一个参数为起点，第二个参数为终点，第三个参数为步长。其中步长支持小数。
+    这里的用法是生成一个x范围为min-max，y范围为min-max 步长为0.1，再用meshgrid函数生成网格矩阵（输出值） xx yy
+    '''
     # Predict the function value for the whole grid
     Z = model(np.c_[xx.ravel(), yy.ravel()])
     Z = Z.reshape(xx.shape)
     # Plot the contour and training examples
-    plt.contourf(xx, yy, Z, cmap=plt.cm.Spectral)
+    plt.contourf(xx, yy, Z, cmap=plt.cm.Spectral) 
+    '''
+    contourf函数是绘制等高线的函数，等高线的绘制主要是三个要素 x，y和（x,y）的高度
+    这里把xx中的作为x坐标
+    yy中的作为y坐标
+    Z就是预测对应（x,y）点的logistic回归预测值（只有0或者1）
+    https://www.jb51.net/article/130617.htm
+    plt.contourf 与 plt.contour 区别：
+
+    f：filled，也即对等高线间的填充区域进行填充（使用不同的颜色）；
+    contourf：将不会再绘制等高线（显然不同的颜色分界就表示等高线本身），
+    '''
     plt.ylabel('x2')
     plt.xlabel('x1')
     plt.scatter(X[0, :], X[1, :], c=y, cmap=plt.cm.Spectral)

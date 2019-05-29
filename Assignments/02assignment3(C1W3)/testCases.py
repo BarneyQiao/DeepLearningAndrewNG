@@ -1,5 +1,6 @@
 import numpy as np
 
+#这个函数是产生3个examples，输入层神经元个数为5，输出为2个
 def layer_sizes_test_case():
     np.random.seed(1)
     X_assess = np.random.randn(5, 3)
