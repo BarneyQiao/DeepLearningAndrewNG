@@ -12,8 +12,8 @@ def sigmoid(Z):
     cache -- returns Z as well, useful during backpropagation
     """
     
-    A = 1/(1+np.exp(-Z))
-    cache = Z
+    A = 1/(1+np.exp(-Z))  #根据本层计算出来的Z 来计算sigmoid值
+    cache = Z     # 把本层的Z计入下来，用于反向传播计算
     
     return A, cache
 
@@ -39,6 +39,7 @@ def relu(Z):
 
 def relu_backward(dA, cache):
     """
+    这个函数是计算relu的导数
     Implement the backward propagation for a single RELU unit.
 
     Arguments:
@@ -61,6 +62,7 @@ def relu_backward(dA, cache):
 
 def sigmoid_backward(dA, cache):
     """
+    这个函数是计算sigmoid函数的导数
     Implement the backward propagation for a single SIGMOID unit.
 
     Arguments:
