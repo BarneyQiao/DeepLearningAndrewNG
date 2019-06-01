@@ -52,9 +52,12 @@ def relu_backward(dA, cache):
     
     Z = cache
     dZ = np.array(dA, copy=True) # just converting dz to a correct object.
-    
+    '''
+    copy：BOOL，可选
+如果为true（默认值），那么对象被复制。否则，副本将仅当__array__返回副本，如果obj是一个嵌套序列，或者做出是否需要拷贝，以满足任何其他要求（DTYPE，订单等）
+    '''
     # When z <= 0, you should set dz to 0 as well. 
-    dZ[Z <= 0] = 0
+    dZ[Z <= 0] = 0  # numpy的语句相当简洁，不用使用if判断。
     
     assert (dZ.shape == Z.shape)
     
@@ -75,8 +78,8 @@ def sigmoid_backward(dA, cache):
     
     Z = cache
     
-    s = 1/(1+np.exp(-Z))
-    dZ = dA * s * (1-s)
+    s = 1/(1+np.exp(-Z)) 
+    dZ = dA * s * (1-s)    # 这里就看到了，激活函数的求导不像 前面线性计算  线性的就是矩阵运算，激活函数的就是对应元素相乘，即数组运算
     
     assert (dZ.shape == Z.shape)
     
