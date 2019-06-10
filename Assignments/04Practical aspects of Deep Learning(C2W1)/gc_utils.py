@@ -30,14 +30,15 @@ def relu(x):
 def dictionary_to_vector(parameters):
     """
     Roll all our parameters dictionary into a single vector satisfying our specific required shape.
+    把所有的dictionary中的值单个输出到一个向量中。
     """
     keys = []
     count = 0
     for key in ["W1", "b1", "W2", "b2", "W3", "b3"]:
         
         # flatten parameter
-        new_vector = np.reshape(parameters[key], (-1,1))
-        keys = keys + [key]*new_vector.shape[0]
+        new_vector = np.reshape(parameters[key], (-1,1))  # 将key对应的values拉成一个列向量
+        keys = keys + [key]*new_vector.shape[0]        # keys
         
         if count == 0:
             theta = new_vector
